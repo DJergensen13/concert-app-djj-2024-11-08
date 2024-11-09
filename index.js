@@ -1,5 +1,7 @@
 let express = require("express");
 let app = new express();
+app.set("view engine", "ejs")
+
 // set up database connection
 const knex = require("knex")({
 client: "mysql",
@@ -11,17 +13,14 @@ database:"paradise-concerts",
 port: 3306,
 },
 });
+
 app.get("/",(req,res) => {
 knex
 .select()
 .from("venues")
 .then((result) => {
-let html = "<body><ul>";
-for (let i=0;i<result.length;i++) {
-html += "<li>" + result[i].location + "</li>";
-}
-html += "</body>"
-res.send(html);
+res.render("index", {aConcerts: result});
 });
 });
 app.listen(3000);
+
